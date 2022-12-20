@@ -30,6 +30,7 @@ USEMODULE += ps
 USEMODULE += netstats_l2
 USEMODULE += netstats_ipv6
 USEMODULE += netstats_rpl
+USEMODULE += saul_default
 
 
 USEMODULE += gnrc_sock_udp
