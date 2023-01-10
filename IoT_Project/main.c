@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #include "shell.h"
+#include "saul_reg.h"
 #include "msg.h"
 #include "net/emcute.h"
 #include "net/ipv6/addr.h"
@@ -132,7 +133,7 @@ int main(void){
     reg.name = "name";
     reg.dev = (void *) 1;
     reg.driver = &adc_saul_driver;
-    saul_reg_add(reg);
+    saul_reg_add(&reg);
 
     puts("MQTT-SN example application\n");
     puts("Type 'help' to get started. Have a look at the README.md for more"
