@@ -10,7 +10,6 @@ RIOTBASE ?= $(CURDIR)/..
 # Include packages that pull up and auto-init the link layer.
 # NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
 USEMODULE += gnrc_netdev_default
-USEMODULE += auto_init_gnrc_netif
 # Activate ICMPv6 error messages
 USEMODULE += gnrc_icmpv6_error
 # Specify the mandatory networking modules for IPv6 and UDP
@@ -21,12 +20,7 @@ USEMODULE += gnrc_rpl
 USEMODULE += auto_init_gnrc_rpl
 # This application dumps received packets to STDIO using the pktdump module
 USEMODULE += gnrc_pktdump
-# Additional networking modules that can be dropped if not needed
-USEMODULE += gnrc_icmpv6_echo
 # Add also the shell, some shell commands
-USEMODULE += shell
-USEMODULE += shell_commands
-USEMODULE += ps
 USEMODULE += netstats_l2
 USEMODULE += netstats_ipv6
 USEMODULE += netstats_rpl
@@ -60,6 +54,30 @@ ifeq (1,$(USE_ZEP))
   TERMFLAGS += -z [::1]:$(ZEP_PORT_BASE)
   USEMODULE += socket_zep
 endif
+
+
+# Include packages that pull up and auto-init the link layer.
+# NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
+USEMODULE += netdev_default
+USEMODULE += auto_init_gnrc_netif
+# Specify the mandatory networking modules for IPv6
+USEMODULE += gnrc_ipv6_default
+# Include MQTT-SN
+USEMODULE += emcute
+# Add also the shell, some shell commands
+USEMODULE += shell
+USEMODULE += shell_cmds_default
+USEMODULE += ps
+# For testing we also include the ping command and some stats
+USEMODULE += gnrc_icmpv6_echo
+# Optimize network stack to for use with a single network interface
+USEMODULE += gnrc_netif_single
+
+# Allow for env-var-based override of the nodes name (EMCUTE_ID)
+ifneq (,$(EMCUTE_ID))
+  CFLAGS += -DEMCUTE_ID=\"$(EMCUTE_ID)\"
+endif
+
 
 # Uncomment the following 2 lines to specify static link lokal IPv6 address
 # this might be useful for testing, in cases where you cannot or do not want to
