@@ -20,6 +20,5 @@ echo "Files were copied to IoT-Lab grenoble server ./A8"
 
 ssh $login@grenoble.iot-lab.info /bin/bash << EOF
 ssh root@node-a8-$node /bin/bash << EOF
-ls
+cd A8; iotlab_flash gnrc_border_router.elf; cd ~/A8/riot/RIOT/dist/tools/uhcpd ; make clean all; cd ../ethos; make clean all; ./start_network.sh /dev/ttyA8_M3 tap0 2001:660:3207:401::/64 500000
 EOF
-
