@@ -19,6 +19,16 @@ scp ./utils/gnrc_border_router.elf $login@grenoble.iot-lab.info:./A8
 echo "Files were copied to IoT-Lab grenoble server ./A8"
 
 ssh $login@grenoble.iot-lab.info /bin/bash << EOF
-ssh root@node-a8-$node /bin/bash << EOF
-cd A8; iotlab_flash gnrc_border_router.elf; cd ~/A8/riot/RIOT/dist/tools/uhcpd ; make clean all; cd ../ethos; make clean all; ./start_network.sh /dev/ttyA8_M3 tap0 2001:660:3207:401::/64 500000
+ssh root@node-a8-$node /bin/bash << 'EOF'
+test=$(ip addr show dev eth0 | sed -e's/^.*inet6 \([^ ]*\)\/.*$/\1/;t;d');
+echo $test;
 EOF
+# ip_adress=$(echo $test| cut -d' ' -f 1);
+# echo $ip_adress;
+# cd A8;
+# iotlab_flash gnrc_border_router.elf;
+# cd ~/A8/riot/RIOT/dist/tools/uhcpd;
+# make clean all;
+# cd ../ethos; make clean all;
+# ./start_network.sh /dev/ttyA8_M3 tap0 2001:660:3207:401::/64 500000
+# EOF
