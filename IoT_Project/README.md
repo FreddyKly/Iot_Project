@@ -14,9 +14,10 @@ The functionality the scripts in _"/scripts"_ are executing:
 ```
 sh ./setup_run_border-router.sh -l <iot-lab_login> -n <node_number>
 ```
-<iot-lab_login>: Your login for the IoT-Lab testbed
-<node_number>: The number of the A8 node you reserved for the border-router (if you reserved node a8-102 you would need to provide "102" here)
+__<iot-lab_login>__: Your login for the IoT-Lab testbed
+<br>
+__<node_number>__: The number of the A8 node you reserved for the border-router (if you reserved node a8-102 you would need to provide "102" here)
 
 This Script can be executed after you established [SSH Access](https://www.iot-lab.info/legacy/tutorials/ssh-access/index.html) to IoT-Lab, a A8-node was reserved on IoT-Lab and the RIOT repository was cloned to the A8 directory (explained [here](https://www.iot-lab.info/legacy/tutorials/riot-public-ipv6-a8-m3/index.html) in the steps 1 - 4). 
 
-The script will copy the _"gnrc_border_router.elf"_ to the ./A8 directory.
+The script will copy the _"gnrc_border_router.elf"_ to the ./A8 directory. It then will ssh onto the specified A8 Board, build and run the border-router.
