@@ -1,5 +1,21 @@
 Readme
 
+# Steps to replicate:
+0. Reserve 3 A8 nodes in grenoble Iot-Lab
+1. Open four terminals
+2. Run `sh ./transfer_files_to_IoT-Lab.sh -l <iot-lab_login>` in __one__ terminal
+3. SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
+4. Run `sh ./setup_border_router_from_A8.sh` to run a border-router
+5. In a __second__ terminal SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
+6. Run `ip -6 -o addr show eth0` to get the ip address of the A8 node
+7. Run `broker_mqtts config.conf`
+8. In a __third__ terminal SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
+9. Run `sh ./setup_mqtt_script.sh`
+10. Type `help` and the run `con {ip address from second terminal} 1885`
+11. After successfully connecting run `sub test/riot`
+12. In a __forth__ terminal SSH to the grenoble server
+13. Run `mosquitto_pub -h {ip address from second terminal} -p 1886 -t test/riot -m iotlab`
+
 # Run the bash scripts
 Replace "<name_of_the_script>" with the name of the script you want to run. Make sure to change directory to _"/scripts"_ before executeing the following command:
 
@@ -22,16 +38,21 @@ This Script can be executed after you established [SSH Access](https://www.iot-l
 
 The script will copy the _"gnrc_border_router.elf"_ to the ./A8 directory. It then will ssh onto the specified A8 Board, build and run the border-router.
 
-## tramsfer_files_to_IoT-Lab.sh:
+## transfer_files_to_IoT-Lab.sh:
 ```
-sh ./tramsfer_files_to_IoT-Lab.sh
+sh ./transfer_files_to_IoT-Lab.sh -l <iot-lab_login>
 ```
 
 Transfers all files that are needed onto the A8 directory on IoT-Lab
 
+## setup_mqtt_script.sh:
+```
+sh ./setup_mqtt_script.sh
+```
+
 ## setup_border_router_from_A8.sh: 
 ```
-sh ./setup_border_router_from_A8.sh -l <iot-lab_login>
+sh ./setup_border_router_from_A8.sh
 ```
 __<iot-lab_login>__: Your login for the IoT-Lab testbed
 <br>
