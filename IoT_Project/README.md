@@ -22,6 +22,23 @@ This Script can be executed after you established [SSH Access](https://www.iot-l
 
 The script will copy the _"gnrc_border_router.elf"_ to the ./A8 directory. It then will ssh onto the specified A8 Board, build and run the border-router.
 
+## tramsfer_files_to_IoT-Lab.sh:
+```
+sh ./tramsfer_files_to_IoT-Lab.sh
+```
+
+Transfers all files that are needed onto the A8 directory on IoT-Lab
+
+## setup_border_router_from_A8.sh: 
+```
+sh ./setup_border_router_from_A8.sh -l <iot-lab_login>
+```
+__<iot-lab_login>__: Your login for the IoT-Lab testbed
+<br>
+
+This script sets up a border router. This script can only be run when you already ssh'ed onto an A8 node and your current
+directory is the A8 directory. To have script 
+on the A8 folder the __transfer_files_to_IoT-Lab.sh__ was already run from your host mashine.
 
 # Setup the AWS EC2 Instance 
 0. From the AWS Learners Lab click on the "AWS" button to connect to "AWS Console"
