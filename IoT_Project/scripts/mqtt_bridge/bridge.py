@@ -5,7 +5,7 @@ import mqtt_client as mqtt
 
 # connect to the MQTT ThingsBoard broker
 print("connecting to the online MQTT broker")
-mclient = mqtt.MQTT_client()
+mqtt_client = mqtt.MQTT_client()
 
 # define callback class for MQTT-SN client
 
@@ -15,8 +15,8 @@ class MyCallback:
     # it pubs the payload of the received messages to the MQTT broker
 
     def messageArrived(self, topicName, payload, qos, retained, msgid):
-        print("default publishArrived")
-        ret = mclient.publish(payload)
+        print "default publishArrived"
+        ret = mqtt_client.publish(payload)
         return True
 
 
@@ -34,4 +34,4 @@ try:
 except KeyboardInterrupt:
     print("Closing the client")
     aclient.disconnect()
-    mclient.disconnect()
+    mqtt_client.disconnect()
