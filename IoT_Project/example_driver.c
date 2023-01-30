@@ -1,3 +1,4 @@
+//Author: Frederik Kliemt (1465987)
 /*
  * Copyright (C) 2016 Eistec AB
  *

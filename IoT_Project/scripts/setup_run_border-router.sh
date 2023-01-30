@@ -1,4 +1,5 @@
 #!/bin/bash
+# Author: Frederik Kliemt (1465987)
 
 while getopts 'l:n:': flag
 do

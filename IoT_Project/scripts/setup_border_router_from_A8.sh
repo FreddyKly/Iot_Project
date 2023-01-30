@@ -1,4 +1,5 @@
 #!/bin/bash
+# Author: Frederik Kliemt (1465987)
 
 iotlab_flash gnrc_border_router.elf;
 cd ~/A8/riot/RIOT/dist/tools/uhcpd;

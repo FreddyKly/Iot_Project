@@ -1,3 +1,4 @@
+# Author: Frederik Kliemt (1465987)
 import subprocess
 
 sub_process = subprocess.Popen("mosquitto_sub -h 2001:660:5307:3000::67 -p 1886 -t test", stdout=subprocess.PIPE, shell=True)

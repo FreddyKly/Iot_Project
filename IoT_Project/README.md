@@ -1,5 +1,5 @@
 Readme
-
+Author: Frederik Kliemt (1465987)
 # Steps to replicate:
 0. Reserve 3 A8 nodes in grenoble Iot-Lab
 1. Open four terminals
