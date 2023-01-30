@@ -14,7 +14,11 @@ Author: Frederik Kliemt (1465987)
 10. Type `help` and the run `con {ip address from second terminal} 1885`
 11. After successfully connecting run `sub test/riot`
 12. In a __forth__ terminal SSH to the grenoble server
-13. Run `mosquitto_pub -h {ip address from second terminal} -p 1886 -t test/riot -m iotlab`
+13. (Run `mosquitto_pub -h {ip address from second terminal} -p 1886 -t test/riot -m iotlab`)
+14. Run `nano mqtt_bridge/pybash_bridge.py` and change the IP-Addresses. (sub-process IP: IP of A8 node
+that runs in the __second__ terminal. pub-process IP: IP of the EC2 instance)
+15. Run `python3 mqtt_bridge/pybash_bridge.py`
+16. Start a EC2 isntance and run a mosquitto broker with -v flag
 
 # Run the bash scripts
 Replace "<name_of_the_script>" with the name of the script you want to run. Make sure to change directory to _"/scripts"_ before executeing the following command:
