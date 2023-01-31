@@ -129,12 +129,17 @@ static const shell_command_t shell_commands[] = {
     { NULL, NULL, NULL }
 };
 
+static const init_driver() {
+    static saul_reg_t saul_entry;
+    extern saul_driver_t custom_driver_saul_driver;
+    saul_entry.name = "Custom_Driver";
+    saul_entry.dev = (void *);
+    saul_entry.driver = &custom_driver_saul_driver;
+    saul_reg_add(&saul_entry);
+}
+
 int main(void){
-    saul_reg_t reg;
-    reg.name = "name";
-    reg.dev = (void *) 1;
-    reg.driver = &adc_saul_driver;
-    saul_reg_add(&reg);
+    init_driver()
 
     puts("MQTT-SN example application\n");
     puts("Type 'help' to get started. Have a look at the README.md for more"

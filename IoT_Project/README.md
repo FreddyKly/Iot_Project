@@ -112,3 +112,4 @@ include -> header_custom_driver.h
 custom_driver -> include -> custom_driver_params.h
                 Makefile and Makefile.include
                 custom_driver.c
+lpsxxx_read_temp
