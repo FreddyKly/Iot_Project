@@ -113,3 +113,6 @@ custom_driver -> include -> custom_driver_params.h
                 Makefile and Makefile.include
                 custom_driver.c
 lpsxxx_read_temp
+
+
+make term with NATIVE to run on local mashine

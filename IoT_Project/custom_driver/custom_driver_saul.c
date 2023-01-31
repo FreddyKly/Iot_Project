@@ -20,19 +20,18 @@
  */
 
 #include <string.h>
-
+#include <stdio.h>
 #include "saul.h"
-#include "saul/periph.h"
-#include "phydat.h"
-#include "periph/adc.h"
+#include "xtimer.h"
 
 static int random_output(const void *dev, phydat_t *res)
 {
-    const saul_adc_params_t *params = *((const saul_adc_params_t **)dev);
-    res->val[0] = adc_sample(params->line, params->res);
-    /* Raw ADC reading has no unit */
-    res->unit = UNIT_NONE;
-    res->scale = 0;
+    uint64_t now = xtimer_now_usec64();
+
+    (void) dev;
+
+    res->val = now % 10
+
     return 1;
 }
 

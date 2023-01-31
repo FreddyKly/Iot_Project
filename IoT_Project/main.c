@@ -1,7 +1,6 @@
 //Author: Frederik Kliemt (1465987)
 #include <shell.h>
 #include <msg.h>
-#include "example_driver.c"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -25,7 +24,7 @@ static char stack[THREAD_STACKSIZE_DEFAULT];
 static msg_t queue[8];
 
 static emcute_sub_t subscriptions[NUMOFSUBS];
-static char topics[NUMOFSUBS][TOPIC_MAXLEN];
+//static char topics[NUMOFSUBS][TOPIC_MAXLEN];
 
 static void *emcute_thread(void *arg)
 {
@@ -36,7 +35,17 @@ static void *emcute_thread(void *arg)
 
 extern saul_driver_t adc_saul_driver;
 
-static void on_pub(const emcute_topic_t *topic, void *data, size_t len)
+static unsigned get_qos(const char *str)
+{
+    int qos = atoi(str);
+    switch (qos) {
+        case 1:     return EMCUTE_QOS_1;
+        case 2:     return EMCUTE_QOS_2;
+        default:    return EMCUTE_QOS_0;
+    }
+}
+
+/*static void on_pub(const emcute_topic_t *topic, void *data, size_t len)
 {
     char *in = (char *)data;
 
@@ -46,7 +55,7 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len)
         printf("%c", in[i]);
     }
     puts("");
-}
+}*/
 
 static int cmd_con(int argc, char **argv)
 {
@@ -129,17 +138,22 @@ static const shell_command_t shell_commands[] = {
     { NULL, NULL, NULL }
 };
 
-static const init_driver() {
+static void init_driver(void) {
     static saul_reg_t saul_entry;
     extern saul_driver_t custom_driver_saul_driver;
     saul_entry.name = "Custom_Driver";
-    saul_entry.dev = (void *);
+    saul_entry.dev = NULL;
     saul_entry.driver = &custom_driver_saul_driver;
     saul_reg_add(&saul_entry);
 }
 
 int main(void){
-    init_driver()
+    init_driver();
+    phydat_t random_values;
+    static saul_reg_t *custom_driver;
+    custom_driver = saul_reg_find_name("Custom_driver");
+    saul_reg_read(custom_driver, &random_values);
+
 
     puts("MQTT-SN example application\n");
     puts("Type 'help' to get started. Have a look at the README.md for more"
