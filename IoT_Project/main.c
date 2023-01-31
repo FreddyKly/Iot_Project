@@ -151,8 +151,15 @@ int main(void){
     init_driver();
     phydat_t random_values;
     static saul_reg_t *custom_driver;
-    custom_driver = saul_reg_find_name("Custom_driver");
-    saul_reg_read(custom_driver, &random_values);
+    custom_driver = saul_reg_find_name("Custom_Driver");
+    while (true)
+    {
+        saul_reg_read(custom_driver, &random_values);
+        printf("%i ", (int)random_values.val[0]);
+        sleep(1);
+    }
+    
+    
 
 
     puts("MQTT-SN example application\n");

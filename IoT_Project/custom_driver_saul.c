@@ -22,11 +22,11 @@
 #include <string.h>
 #include <stdio.h>
 #include "saul.h"
-#include "xtimer.h"
+#include "ztimer.h"
 
 static int random_output(const void *dev, phydat_t *res)
 {
-    uint64_t now = xtimer_now_usec64();
+    uint64_t now = ztimer_now(ZTIMER_MSEC);
 
     (void) dev;
 
