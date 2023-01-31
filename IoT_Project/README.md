@@ -105,3 +105,10 @@ To publish to this broker you could run a command like this:
 ```
 mosquitto_pub -h <Public IP Adress of the EC2 instance› -p 1884 -t test/riot -m "iotlab"
 ```
+
+# Register driver
+saul -> init_devs -> auto_init_custom driver.c
+include -> header_custom_driver.h
+custom_driver -> include -> custom_driver_params.h
+                Makefile and Makefile.include
+                custom_driver.c
