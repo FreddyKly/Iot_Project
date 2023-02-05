@@ -26,6 +26,16 @@ static msg_t queue[8];
 static emcute_sub_t subscriptions[NUMOFSUBS];
 //static char topics[NUMOFSUBS][TOPIC_MAXLEN];
 
+
+static void init_driver(void) {
+    static saul_reg_t saul_entry;
+    extern saul_driver_t custom_driver_saul_driver;
+    saul_entry.name = "Custom_Driver";
+    saul_entry.dev = NULL;
+    saul_entry.driver = &custom_driver_saul_driver;
+    saul_reg_add(&saul_entry);
+}
+
 static void *emcute_thread(void *arg)
 {
     (void)arg;
@@ -71,71 +81,56 @@ static int cmd_con(int argc, char **argv)
     return 0;
 }
 
-static int cmd_pub(int argc, char **argv)
+static int pub(char *topic, char *message)
 {
     emcute_topic_t t;
     unsigned flags = EMCUTE_QOS_0;
 
-    if (argc < 3) {
-        printf("usage: %s <topic name> <data> [QoS level]\n", argv[0]);
-        return 1;
-    }
-
-    /* parse QoS level */
-    if (argc >= 4) {
-        flags |= get_qos(argv[3]);
-    }
-
-    printf("pub with topic: %s and name %s and flags 0x%02x\n", argv[1], argv[2], (int)flags);
-
     /* step 1: get topic id */
-    t.name = argv[1];
+    t.name = topic;
     if (emcute_reg(&t) != EMCUTE_OK) {
         puts("error: unable to obtain topic ID");
         return 1;
     }
 
     /* step 2: publish data */
-    if (emcute_pub(&t, argv[2], strlen(argv[2]), flags) != EMCUTE_OK) {
+    if (emcute_pub(&t, message, strlen(message), flags) != EMCUTE_OK) {
         printf("error: unable to publish data to topic '%s [%i]'\n",
                 t.name, (int)t.id);
         return 1;
     }
 
     printf("Published %i bytes to topic '%s [%i]'\n",
-            (int)strlen(argv[2]), t.name, t.id);
+            (int)strlen(message), t.name, t.id);
 
     return 0;
 }
 
-static void init_driver(void) {
-    static saul_reg_t saul_entry;
-    extern saul_driver_t custom_driver_saul_driver;
-    saul_entry.name = "Custom_Driver";
-    saul_entry.dev = NULL;
-    saul_entry.driver = &custom_driver_saul_driver;
-    saul_reg_add(&saul_entry);
-}
-
-int main(void){
+static int cmd_start(void) {
     init_driver();
     phydat_t random_values;
     static saul_reg_t *custom_driver;
     custom_driver = saul_reg_find_name("Custom_Driver");
+    char dataStr[5];
+    con("", 1885, NULL, NULL);
     while (true)
     {
         saul_reg_read(custom_driver, &random_values);
-        printf("%i ", (int)random_values.val[0]);
+        printf("Read-Value: %i \n", (int)random_values.val[0]);
+        itoa(random_values.val[0], dataStr, 10);
+
+        pub("data", dataStr);
         sleep(1);
     }
-    
-    
+}
 
+static const shell_command_t shell_commands[] = {
+    { "con", "connect to MQTT broker", cmd_con },
+    { "start", "start sending data", cmd_start },
+    { NULL, NULL, NULL }
+};
 
-    puts("MQTT-SN example application\n");
-    puts("Type 'help' to get started. Have a look at the README.md for more"
-         "information.");
-
+int main(int argc, char **argv){
     /* the main thread needs a msg queue to be able to run `ping`*/
     msg_init_queue(queue, ARRAY_SIZE(queue));
 
@@ -146,7 +141,9 @@ int main(void){
     thread_create(stack, sizeof(stack), EMCUTE_PRIO, 0,
                   emcute_thread, NULL, "emcute");
 
-    
+    /* start shell */
+    char line_buf[SHELL_DEFAULT_BUFSIZE];
+    shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     /* should be never reached */
     return 0;
