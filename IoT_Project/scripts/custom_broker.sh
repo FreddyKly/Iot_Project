@@ -14,4 +14,4 @@ if [ "$IP" = "" ]; then
     exit 1
 fi
 
-mosquitto_sub -h $IP -p 1886 -t test
+mosquitto_sub -h $IP -p 1886 -t data
