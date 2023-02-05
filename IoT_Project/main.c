@@ -31,31 +31,7 @@ static void *emcute_thread(void *arg)
     (void)arg;
     emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
     return NULL;    /* should never be reached */
-}
-
-extern saul_driver_t adc_saul_driver;
-
-static unsigned get_qos(const char *str)
-{
-    int qos = atoi(str);
-    switch (qos) {
-        case 1:     return EMCUTE_QOS_1;
-        case 2:     return EMCUTE_QOS_2;
-        default:    return EMCUTE_QOS_0;
-    }
-}
-
-/*static void on_pub(const emcute_topic_t *topic, void *data, size_t len)
-{
-    char *in = (char *)data;
-
-    printf("### got publication for topic '%s' [%i] ###\n",
-           topic->name, (int)topic->id);
-    for (size_t i = 0; i < len; i++) {
-        printf("%c", in[i]);
-    }
-    puts("");
-}*/
+} 
 
 static int cmd_con(int argc, char **argv)
 {
@@ -132,12 +108,6 @@ static int cmd_pub(int argc, char **argv)
     return 0;
 }
 
-static const shell_command_t shell_commands[] = {
-    { "con", "connect to MQTT broker", cmd_con },
-    { "pub", "publish something", cmd_pub },
-    { NULL, NULL, NULL }
-};
-
 static void init_driver(void) {
     static saul_reg_t saul_entry;
     extern saul_driver_t custom_driver_saul_driver;
@@ -176,9 +146,7 @@ int main(void){
     thread_create(stack, sizeof(stack), EMCUTE_PRIO, 0,
                   emcute_thread, NULL, "emcute");
 
-    /* start shell */
-    char line_buf[SHELL_DEFAULT_BUFSIZE];
-    shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+    
 
     /* should be never reached */
     return 0;
