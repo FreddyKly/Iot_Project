@@ -82,30 +82,30 @@ static int cmd_con(int argc, char **argv)
     return 0;
 }
 
-// static int pub(char *topic, char *message)
-// {
-//     emcute_topic_t t;
-//     unsigned flags = EMCUTE_QOS_0;
+static int pub(char *topic, char *message)
+{
+    emcute_topic_t t;
+    unsigned flags = EMCUTE_QOS_0;
 
-//     /* step 1: get topic id */
-//     t.name = topic;
-//     if (emcute_reg(&t) != EMCUTE_OK) {
-//         puts("error: unable to obtain topic ID");
-//         return 1;
-//     }
+    /* step 1: get topic id */
+    t.name = topic;
+    if (emcute_reg(&t) != EMCUTE_OK) {
+        puts("error: unable to obtain topic ID");
+        return 1;
+    }
 
-//     /* step 2: publish data */
-//     if (emcute_pub(&t, message, strlen(message), flags) != EMCUTE_OK) {
-//         printf("error: unable to publish data to topic '%s [%i]'\n",
-//                 t.name, (int)t.id);
-//         return 1;
-//     }
+    /* step 2: publish data */
+    if (emcute_pub(&t, message, strlen(message), flags) != EMCUTE_OK) {
+        printf("error: unable to publish data to topic '%s [%i]'\n",
+                t.name, (int)t.id);
+        return 1;
+    }
 
-//     printf("Published %i bytes to topic '%s [%i]'\n",
-//             (int)strlen(message), t.name, t.id);
+    printf("Published %i bytes to topic '%s [%i]'\n",
+            (int)strlen(message), t.name, t.id);
 
-//     return 0;
-// }
+    return 0;
+}
 
 static int cmd_start(int argc, char **argv) {
     init_driver();
@@ -122,7 +122,7 @@ static int cmd_start(int argc, char **argv) {
         printf("Read-Value: %i \n", (int)random_values.val[0]);
         sprintf(dataStr, "%i", random_values.val[0]);
 
-        //pub("data", dataStr);
+        pub("data", dataStr);
         ztimer_sleep(ZTIMER_SEC, 1);
     }
     return 0;
