@@ -18,7 +18,7 @@ For a lookup of Nodenames see architecture.jpg
 12. In a __forth__ terminal SSH to the grenoble server
 13. Run `nano mqtt_bridge/pybash_bridge.py` and change the IP-Addresses. (sub-process IP: IP of A8 node
 that runs in the __second__ terminal. pub-process IP: IP of the EC2 instance)
-14. Run `python3 mqtt_bridge/pybash_bridge.py`
+14. Run `python3 mqtt_bridge/pybash_bridge.py <IP of A8-m3_2> <IP AWS EC2 Instance_1>`
 15. Start two EC2 instances like described here: [Setup the AWS EC2 Instance](#setup-the-aws-ec2-instance)
 16. On one of them create a file named "config.conf" and copy the contents of ./scripts/utils/config.conf into it.
 17. Then run `mosquitto -c config.conf` set up a MQTT broker (__AWS EC2 Instance_1__)
