@@ -29,11 +29,14 @@ static emcute_sub_t subscriptions[NUMOFSUBS];
 
 
 static void init_driver(void) {
+    // Initialize the custom saul driver
     static saul_reg_t saul_entry;
     extern saul_driver_t custom_driver_saul_driver;
     saul_entry.name = "Custom_Driver";
     saul_entry.dev = NULL;
     saul_entry.driver = &custom_driver_saul_driver;
+
+    // Add the custom driver to the saul registry
     saul_reg_add(&saul_entry);
 }
 

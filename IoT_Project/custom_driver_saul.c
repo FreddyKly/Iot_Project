@@ -7,6 +7,7 @@
 
 static int random_output(const void *dev, phydat_t *res)
 {
+    //Driver to increment value each second
     uint64_t now = ztimer_now(ZTIMER_SEC);
 
     (void) dev;
