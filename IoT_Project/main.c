@@ -106,22 +106,25 @@ static int pub(char *topic, char *message)
     return 0;
 }
 
-static int cmd_start(void) {
+static int cmd_start(int argc, char **argv) {
     init_driver();
+    if(argc > 0) {
+        printf("%s", argv[0]);
+    }
     phydat_t random_values;
     static saul_reg_t *custom_driver;
     custom_driver = saul_reg_find_name("Custom_Driver");
-    char dataStr[5];
-    con("", 1885, NULL, NULL);
+    char dataStr[7];
     while (true)
     {
         saul_reg_read(custom_driver, &random_values);
         printf("Read-Value: %i \n", (int)random_values.val[0]);
-        itoa(random_values.val[0], dataStr, 10);
+        sprintf(dataStr, "%i", random_values.val[0]);
 
         pub("data", dataStr);
         sleep(1);
     }
+    return 0;
 }
 
 static const shell_command_t shell_commands[] = {
@@ -130,7 +133,7 @@ static const shell_command_t shell_commands[] = {
     { NULL, NULL, NULL }
 };
 
-int main(int argc, char **argv){
+int main(void){
     /* the main thread needs a msg queue to be able to run `ping`*/
     msg_init_queue(queue, ARRAY_SIZE(queue));
 
