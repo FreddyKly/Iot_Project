@@ -8,22 +8,20 @@ Author: Frederik Kliemt (1465987)
 1. Open four terminals
 2. Run `sh ./transfer_files_to_IoT-Lab.sh -l <iot-lab_login>` in __one__ terminal
 3. SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
-4. Run `sh ./setup_border_router_from_A8.sh` to run a border-router (__A8-m3_1__)
+4. Run `sh ./setup_border_router_from_A8.sh` to run a border-router (this will be __A8-m3_1__)
 5. In a __second__ terminal SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
 6. Run `ip -6 -o addr show eth0` to get the ip address of the A8 node
-7. Run `broker_mqtts config_IoT.conf` (__A8-m3_2__)
+7. Run `broker_mqtts config_IoT.conf` (this will be __A8-m3_2__)
 8. In a __third__ terminal SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
-9. Run `sh ./setup_mqtt_script.sh` (__A8-m3_3__)
+9. Run `sh ./setup_mqtt_script.sh` (this will be __A8-m3_3__)
 10. Type and the run `con {ip address from A8-m3_2} 1885`
 11. After successfully connecting, run `start`
 12. In a __forth__ terminal SSH to the grenoble server
-13. Run `nano mqtt_bridge/pybash_bridge.py` and change the IP-Addresses. (sub-process IP: IP of A8 node
-that runs in the __second__ terminal. pub-process IP: IP of the EC2 instance)
-14. Run `python3 mqtt_bridge/pybash_bridge.py <IP of A8-m3_2> <IP AWS EC2 Instance_1>`
-15. Start two EC2 instances like described here: [Setup the AWS EC2 Instance](#setup-the-aws-ec2-instance)
-16. On one of them create a file named "config_AWS.conf" and copy the contents of ./scripts/utils/config_AWS.conf into it.
-17. Then run `mosquitto -c config_AWS.conf` set up a MQTT broker (__AWS EC2 Instance_1__)
-18. On the other one run `mosquitto_sub -h <Public IP of AWS EC2 Instance_1> -p 1886 -t data`
+13. Run `python3 mqtt_bridge/pybash_bridge.py <IP of A8-m3_2> <IP AWS EC2 Instance_1>`
+14. Start two EC2 instances like described here: [Setup the AWS EC2 Instance](#setup-the-aws-ec2-instance)
+15. On one of them create a file named "config_AWS.conf" and copy the contents of ./scripts/utils/config_AWS.conf into it.
+16. Then run `mosquitto -c config_AWS.conf` set up a MQTT broker (this will be __AWS EC2 Instance_1__)
+17. On the other one run `mosquitto_sub -h <Public IP of AWS EC2 Instance_1> -p 1886 -t data`
 
 # Scripts
 The functionality the scripts in _"/scripts"_ are executing:
