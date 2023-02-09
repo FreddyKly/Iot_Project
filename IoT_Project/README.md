@@ -3,6 +3,13 @@ Author: Frederik Kliemt (1465987)
 
 # Architecture
 ![image](architecture.jpg)
+
+# Demonstration 
+[Google Drive link to the video](https://drive.google.com/file/d/1KpUqUcO1IfSSSte__fJzNczfYABwB6sP/view?usp=sharing)
+
+# Presentation
+[Google Slides link to presentation](https://docs.google.com/presentation/d/1cRJ6mNfRXzGjjR-xkMuB9UrZYvsJ-zol/edit#slide=id.p1)
+
 # Steps to replicate:
 0. Reserve 3 A8 nodes in grenoble Iot-Lab and clone the RIOT repository into the A8 directory
 1. Open four terminals
