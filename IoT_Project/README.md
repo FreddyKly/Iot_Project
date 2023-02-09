@@ -1,7 +1,8 @@
 Readme
 Author: Frederik Kliemt (1465987)
 
-For a lookup of Nodenames see architecture.jpg
+# Architecture
+![image](architecture.jpg)
 # Steps to replicate:
 0. Reserve 3 A8 nodes in grenoble Iot-Lab
 1. Open four terminals
@@ -10,26 +11,19 @@ For a lookup of Nodenames see architecture.jpg
 4. Run `sh ./setup_border_router_from_A8.sh` to run a border-router (__A8-m3_1__)
 5. In a __second__ terminal SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
 6. Run `ip -6 -o addr show eth0` to get the ip address of the A8 node
-7. Run `broker_mqtts config.conf` (__A8-m3_2__)
+7. Run `broker_mqtts config_IoT.conf` (__A8-m3_2__)
 8. In a __third__ terminal SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
 9. Run `sh ./setup_mqtt_script.sh` (__A8-m3_3__)
 10. Type and the run `con {ip address from A8-m3_2} 1885`
-11. After successfully connecting run `start`
+11. After successfully connecting, run `start`
 12. In a __forth__ terminal SSH to the grenoble server
 13. Run `nano mqtt_bridge/pybash_bridge.py` and change the IP-Addresses. (sub-process IP: IP of A8 node
 that runs in the __second__ terminal. pub-process IP: IP of the EC2 instance)
 14. Run `python3 mqtt_bridge/pybash_bridge.py <IP of A8-m3_2> <IP AWS EC2 Instance_1>`
 15. Start two EC2 instances like described here: [Setup the AWS EC2 Instance](#setup-the-aws-ec2-instance)
-16. On one of them create a file named "config.conf" and copy the contents of ./scripts/utils/config.conf into it.
-17. Then run `mosquitto -c config.conf` set up a MQTT broker (__AWS EC2 Instance_1__)
+16. On one of them create a file named "config_AWS.conf" and copy the contents of ./scripts/utils/config_AWS.conf into it.
+17. Then run `mosquitto -c config_AWS.conf` set up a MQTT broker (__AWS EC2 Instance_1__)
 18. On the other one run `mosquitto_sub -h <Public IP of AWS EC2 Instance_1> -p 1886 -t data`
-
-# Run the bash scripts
-Replace "<name_of_the_script>" with the name of the script you want to run. Make sure to change directory to _"/scripts"_ before executeing the following command:
-
-```
-sh ./<name_of_the_script> -<flag> <argument>
-```
 
 # Scripts
 The functionality the scripts in _"/scripts"_ are executing:
@@ -38,6 +32,7 @@ The functionality the scripts in _"/scripts"_ are executing:
 ```
 sh ./setup_run_border-router.sh -l <iot-lab_login> -n <node_number>
 ```
+This script is not reliably working. Instead use [this](#setup_border_router_from_a8sh) <br>
 __<iot-lab_login>__: Your login for the IoT-Lab testbed
 <br>
 __<node_number>__: The number of the A8 node you reserved for the border-router (if you reserved node a8-102 you would need to provide "102" here)
@@ -58,12 +53,12 @@ Transfers all files that are needed onto the A8 directory on IoT-Lab
 sh ./setup_mqtt_script.sh
 ```
 
+This script runs the driver-application and publishes the data via MQTT.
+
 ## setup_border_router_from_A8.sh: 
 ```
 sh ./setup_border_router_from_A8.sh
 ```
-__<iot-lab_login>__: Your login for the IoT-Lab testbed
-<br>
 
 This script sets up a border router. This script can only be run when you already ssh'ed onto an A8 node and your current
 directory is the A8 directory. To have script 
@@ -98,3 +93,22 @@ sudo apt-get install mosquitto
 sudo apt-get install mosquitto-clients
 sudo apt install awscli
 ```
+
+# How everything works
+In Order to send data from an IoT device from IoT-Lab to the AWS cloud the 
+application consists of 6 different services. 
+1. Border-router
+2. Rsmb MQTT Broker in IoT-Lab
+3. IoT-Device with driver to supply data
+4. Bridge to route MQTT messages from IoT-Lab to AWS
+5. Mosquitto MQTT Broker on AWS
+6. EC2 Instance to receive data on AWS
+
+### Border-Router
+The border-router is responsible to route messages between the 6Lo network and 'normal' IPv6 networks. So in order to send messages from an A8 node to the internet, a border-router is needed. To accomplish that, the border-router example aplication from RIOT was compiled and saved in the repository as "gnrc_border_router.elf, because it is easily implemented and was tested and therefore sped up implementation time.
+
+### Rsmb Broker in IoT-Lab
+The Really Small Message Broker is the MQTT broker of choice for MQTT-SN in the RIOT emcute_mqttsn tutorial which made it an intriguing option to look into. After finding out that it also offered the functionality to translate from MQTT-SN to MQTT and it was already tested and the configuration was known it was chosen as Broker within the IoT-Lab 6Lo network. It Was important to be able to translate between MQTT and MQTT-SN because the IoT-Device driver application that was designed during this project only sent MQTT-SN, but AWS was configured to only use MQTT.
+
+### IoT-Device driver application
+The IoT-Device driver application was designed to send data over the MQTT-SN protocol to a broker, that can be configuered in the command line by the application user. The application uses a SAUL-driver that generates data that starts at 0 and counts up to 9 iterativly, every second. The driver needs to be 
