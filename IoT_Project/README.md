@@ -4,7 +4,7 @@ Author: Frederik Kliemt (1465987)
 # Architecture
 ![image](architecture.jpg)
 # Steps to replicate:
-0. Reserve 3 A8 nodes in grenoble Iot-Lab
+0. Reserve 3 A8 nodes in grenoble Iot-Lab and clone the RIOT repository into the A8 directory
 1. Open four terminals
 2. Run `sh ./transfer_files_to_IoT-Lab.sh -l <iot-lab_login>` in __one__ terminal
 3. SSH into IoT-Lab and navigate to the A8 directory of an A8 node and run `iotlab_reset`
@@ -111,4 +111,13 @@ The border-router is responsible to route messages between the 6Lo network and '
 The Really Small Message Broker is the MQTT broker of choice for MQTT-SN in the RIOT emcute_mqttsn tutorial which made it an intriguing option to look into. After finding out that it also offered the functionality to translate from MQTT-SN to MQTT and it was already tested and the configuration was known it was chosen as Broker within the IoT-Lab 6Lo network. It Was important to be able to translate between MQTT and MQTT-SN because the IoT-Device driver application that was designed during this project only sent MQTT-SN, but AWS was configured to only use MQTT.
 
 ### IoT-Device driver application
-The IoT-Device driver application was designed to send data over the MQTT-SN protocol to a broker, that can be configuered in the command line by the application user. The application uses a SAUL-driver that generates data that starts at 0 and counts up to 9 iterativly, every second. The driver needs to be 
+The IoT-Device driver application was designed to send data over the MQTT-SN protocol to a broker, that can be configuered in the command line by the application user. The application uses a SAUL-driver that generates data that starts at 0 and counts up to 9 iterativly, every second. The driver needs to be initialized and and registered in the SAUL registry. It can than be fetched from the registry in the main programm and the read function can be called to get the generated data. When the project is compiled and then started using the setup_mqtt_script.sh script, the user can type `con <ip adress of the rsmb>` to connect to the rsmb. As soon as this connection-building was successful the user can start the driver by running the command `start`.
+
+### MQTT Bridge between IoT-Lab and AWS
+To be able to send the MQTT messages from the driver over the rsmb to AWS-Broker a services that bridges between those two was needed. To accomplish that the way of least resistence was chosen, which was programming a python script to forward the message and running it on the grenoble server. The script uses the "subprocess" library to run shell commands within a python script. The script subscribes to the rsmb using `mosquitto_sub` and then publishes the message that was received to the AWS-Broker using `mosquitto _pub`
+
+### Broker on AWS
+The broker on AWS is configured using the config_AWS.conf file. Mosquitto is the library that is used to set up the broker on an EC2 istance.
+
+### Data Receiver
+To receive the data within the AWS an EC2 instance is used to run the `mosquitto_sub` command and thus subscribe to the Broker running on the other EC2 instance.
